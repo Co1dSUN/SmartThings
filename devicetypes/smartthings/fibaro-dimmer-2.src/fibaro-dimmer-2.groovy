@@ -25,7 +25,7 @@ metadata {
         capability "Holdable Button"
 
         //Extending Fibaro Dimmer 2 devices with scene attribute
-        attribute "scene", "number"
+        //attribute "scene", "number"
 
 		command "reset"
         command "changeSingleParamAfterSecure"
@@ -36,7 +36,17 @@ metadata {
 
 	// simulator metadata
 	simulator {
-    	status "on":  "command: 2003, payload: FF"
+		status "button 1 pushed":  "command: 2001, payload: 01"
+		status "button 1 held":  "command: 2001, payload: 15"
+		status "button 2 pushed":  "command: 2001, payload: 29"
+		status "button 2 held":  "command: 2001, payload: 3D"
+		status "button 3 pushed":  "command: 2001, payload: 51"
+		status "button 3 held":  "command: 2001, payload: 65"
+		status "button 4 pushed":  "command: 2001, payload: 79"
+		status "button 4 held":  "command: 2001, payload: 8D"
+        status "button 5 pushed":  "command: 2001, payload: A1"
+
+		status "on":  "command: 2003, payload: FF"
 		status "off": "command: 2003, payload: 00"
 		status "09%": "command: 2003, payload: 09"
 		status "10%": "command: 2003, payload: 0A"
@@ -93,13 +103,14 @@ metadata {
 			state "button 2 pushed", label: "pushed #2", icon: "st.unknown.zwave.remote-controller", backgroundColor: "#79b821"
 			state "button 3 pushed", label: "pushed #3", icon: "st.unknown.zwave.remote-controller", backgroundColor: "#79b821"
 			state "button 4 pushed", label: "pushed #4", icon: "st.unknown.zwave.remote-controller", backgroundColor: "#79b821"
+            state "button 5 pushed", label: "pushed #5", icon: "st.unknown.zwave.remote-controller", backgroundColor: "#79b821"
 			state "button 1 held", label: "held #1", icon: "st.unknown.zwave.remote-controller", backgroundColor: "#ffa81e"
 			state "button 2 held", label: "held #2", icon: "st.unknown.zwave.remote-controller", backgroundColor: "#ffa81e"
 			state "button 3 held", label: "held #3", icon: "st.unknown.zwave.remote-controller", backgroundColor: "#ffa81e"
 			state "button 4 held", label: "held #4", icon: "st.unknown.zwave.remote-controller", backgroundColor: "#ffa81e"
 		}
 
-		main(["switch","power","energy"])
+		main(["switch","button","power","energy"])
 		details(["switch","power","energy","configureAfterSecure","button","refresh","reset"])
 	}
 
@@ -975,4 +986,12 @@ private secure(physicalgraph.zwave.Command cmd) {
 private secureSequence(commands, delay=200) {
 	log.debug "$commands"
 	delayBetween(commands.collect{ secure(it) }, delay)
+}
+
+def installed() {
+	initialize()
+}
+
+def initialize() {
+	sendEvent(name: "numberOfButtons", value: 5)
 }
