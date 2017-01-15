@@ -848,6 +848,7 @@ def refresh() {
 		zwave.meterV2.meterGet(scale: 0),
 		zwave.meterV2.meterGet(scale: 2)
 	])
+    initialize()
 }
 
 def reset() {
@@ -976,6 +977,7 @@ def configure() {
 def updated() {
 	log.debug "updated()"
 	response(["delay 2000"] + configureAfterSecure() + refresh())
+    initialize()
 }
 
 private secure(physicalgraph.zwave.Command cmd) {
