@@ -81,10 +81,10 @@ metadata {
             state "muted", label: '${name}', action:"unmute", backgroundColor: "#79b821", icon:"st.Electronics.electronics13"
             state "unmuted", label: '${name}', action:"mute", backgroundColor: "#ffffff", icon:"st.Electronics.electronics13"
 		}
-		standardTile("sInput", "device.input", width: 4, height: 2, decoration: "flat"){
+		/*standardTile("sInput", "device.input", width: 4, height: 2, decoration: "flat"){
         	state "Digital In", label: '${currentValue}', action:"sRadio", icon:"st.Office.office12"
         	state "Tuner", label: '${currentValue}', action:"sPC", icon:"st.Office.office12"
-        }
+        }*/
         standardTile("net", "device.network", width: 2, height: 2, decoration: "flat"){
             state "SPOTIFY", label: '${currentValue}', action: "spotify", icon:"st.Electronics.electronics3" , backgroundColor: "#53a7c0"
             //state "PC", label: 'PC', action: "pc", icon:"st.Electronics.electronics3" , backgroundColor: "#79b821"         
@@ -165,14 +165,16 @@ def setLevel(val) {
     request("cmd0=PutMasterVolumeSet%2F$scaledVal")
 }
 
-def volUp() {
-	//sendEvent(name: "level", value: val)
-	sendget('Direct.xml?MVUP')
+def volUp(val) {
+	sendEvent(name: "level", value: scaledVal)
+	def int scaledVal = val *0.8 - 80
+    request("cmd0=PutMasterVolumeSet%2F$scaledVal")
 }
 
-def volDown() {
-	//sendEvent(name: "level", value: val)
-	sendget('Direct.xml?MVDOWN')
+def volDown(val) {
+	sendEvent(name: "level", value: scaledVal)
+	def int scaledVal = val *0.8 - 80
+    request("cmd0=PutMasterVolumeSet%2F$scaledVal")
 }
 
 def on() {
